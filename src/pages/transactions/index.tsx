@@ -8,6 +8,7 @@ import {
   TransactionTable,
 } from './styles'
 import { TransactionContext } from '../../contexts/TransactionsContext'
+import { dateFormatter, priceFormatter } from '../../utils/formatter'
 
 export type TransactionsProps = {
   title?: string
@@ -29,11 +30,14 @@ export const Transactions = ({ title }: TransactionsProps) => {
                   <td width="50%">{transaction.description}</td>
                   <td>
                     <PriceHighLight variant={transaction.type}>
-                      R$ {transaction.price.toString()}
+                      {transaction.type === 'outcome' && '- '}
+                      {priceFormatter.format(transaction.price)}
                     </PriceHighLight>
                   </td>
                   <td>{transaction.category}</td>
-                  <td>{transaction.createdAt}</td>
+                  <td>
+                    {dateFormatter.format(new Date(transaction.createdAt))}
+                  </td>
                 </tr>
               )
             })}

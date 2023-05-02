@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { Header } from '../../components/Header'
 import { SearchForm } from '../../components/SearchForm'
 import { Summary } from '../../components/Summary'
@@ -10,8 +11,25 @@ import {
 export type TransactionsProps = {
   title?: string
 }
-
+interface Transaction {
+  id: number
+  description: string
+  type: 'income' | 'outcome'
+  category: string
+  price: number
+  createdAt: string
+}
 export const Transactions = ({ title }: TransactionsProps) => {
+  const [transactions, setTransactions] = useState<Transaction[]>([])
+  useEffect(() => {
+    async function loadTransaction() {
+      const response = await fetch('http://localhost:3000/transactions')
+      const data = await response.json()
+      setTransactions(data)
+    }
+    loadTransaction()
+  }, [])
+
   return (
     <div>
       <Header />
@@ -20,30 +38,20 @@ export const Transactions = ({ title }: TransactionsProps) => {
         <SearchForm />
         <TransactionTable>
           <tbody>
-            <tr>
-              <td width="50%">website development</td>
-              <td>
-                <PriceHighLight variant="income">R$ 12.000,00</PriceHighLight>
-              </td>
-              <td>Sale</td>
-              <td>13/04/2022</td>
-            </tr>
-            <tr>
-              <td width="50%">Hamburguer</td>
-              <td>
-                <PriceHighLight variant="outcome">- R$ 59,00</PriceHighLight>
-              </td>
-              <td>Food</td>
-              <td>10/04/2022</td>
-            </tr>
-            <tr>
-              <td width="50%">Apartment rent</td>
-              <td>
-                <PriceHighLight variant="outcome">- R$ 1.200,00</PriceHighLight>
-              </td>
-              <td>House</td>
-              <td>27/03/2022</td>
-            </tr>
+            {transactions.map((transaction) => {
+              return (
+                <tr key={transaction.id}>
+                  <td width="50%">{transaction.description}</td>
+                  <td>
+                    <PriceHighLight variant={transaction.type}>
+                      R$ {transaction.price.toString()}
+                    </PriceHighLight>
+                  </td>
+                  <td>{transaction.category}</td>
+                  <td>{transaction.createdAt}</td>
+                </tr>
+              )
+            })}
           </tbody>
         </TransactionTable>
       </TransactionContainer>

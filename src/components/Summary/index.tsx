@@ -10,7 +10,7 @@ export const Summary = ({ title }: SummaryProps) => {
     <SummaryContainer>
       <SummaryCard>
         <header>
-          <span>Entrary</span>
+          <span>Receive</span>
           <ArrowCircleUp size={32} color="#00b37e" />
         </header>
         <strong>R$ 17.400,00</strong>
@@ -18,7 +18,7 @@ export const Summary = ({ title }: SummaryProps) => {
 
       <SummaryCard>
         <header>
-          <span>Out</span>
+          <span>Payable</span>
           <ArrowCircleDown size={32} color="#f75a68" />
         </header>
         <strong>R$ 1.259,00</strong>
@@ -26,7 +26,7 @@ export const Summary = ({ title }: SummaryProps) => {
 
       <SummaryCard variant="green">
         <header>
-          <span>Out</span>
+          <span>Total</span>
           <CurrencyDollar size={32} color="#fff" />
         </header>
         <strong>R$ 16.141,00</strong>

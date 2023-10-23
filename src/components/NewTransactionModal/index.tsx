@@ -1,4 +1,9 @@
+import * as Dialog from '@radix-ui/react-dialog'
 import { ArrowCircleDown, ArrowCircleUp, X } from 'phosphor-react'
+import * as z from 'zod'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+
 import {
   CloseButton,
   Content,
@@ -6,13 +11,32 @@ import {
   Overlay,
   TransactionTypeButton,
 } from './styles'
-import * as Dialog from '@radix-ui/react-dialog'
+
+const newTransactionFormSchema = z.object({
+  description: z.string(),
+  price: z.number(),
+  category: z.string(),
+  // type: z.enum(['income', 'outcome']),
+})
+type NewTransactionFormInputs = z.infer<typeof newTransactionFormSchema>
 
 export type NewTransactionModalProps = {
   title?: string
 }
 
 export const NewTransactionModal = ({ title }: NewTransactionModalProps) => {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<NewTransactionFormInputs>({
+    resolver: zodResolver(newTransactionFormSchema),
+  })
+
+  async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
+    console.log(data)
+  }
+
   return (
     <Dialog.Portal>
       <Overlay />
@@ -21,11 +45,28 @@ export const NewTransactionModal = ({ title }: NewTransactionModalProps) => {
           <X size={24} />
         </CloseButton>
         <Dialog.Title>New Transaction</Dialog.Title>
-        <form action="">
-          <input type="text" placeholder="Description" required />
-          <input type="number" placeholder="Price" required />
-          <input type="text" placeholder="Category" required />
-          <button type="submit">Register</button>
+        <form onSubmit={handleSubmit(handleCreateNewTransaction)}>
+          <input
+            type="text"
+            placeholder="Description"
+            required
+            {...register('description')}
+          />
+          <input
+            type="number"
+            placeholder="Price"
+            required
+            {...register('price', { valueAsNumber: true })}
+          />
+          <input
+            type="text"
+            placeholder="Category"
+            required
+            {...register('category')}
+          />
+          <button type="submit" disabled={isSubmitting}>
+            Register
+          </button>
 
           <TransactionType>
             <TransactionTypeButton variant="income" value="income">

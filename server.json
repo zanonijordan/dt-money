@@ -1,20 +1,28 @@
 {
-    "transactions": [
-        {
-            "id": 1,
-            "description": "website development",
-            "type": "income",
-            "category": "sell",
-            "price": 14000,
-            "createdAt": "2023-05-02T09:34:22.652Z"
-        },
-        {
-            "id": 2,
-            "description": "Hamburger",
-            "type": "outcome",
-            "category": "food",
-            "price": 6,
-            "createdAt": "2023-05-02T09:45:22.652Z"
-        }
-    ]
+  "transactions": [
+    {
+      "id": 1,
+      "description": "website development",
+      "type": "income",
+      "category": "sell",
+      "price": 14000,
+      "createdAt": "2023-05-02T09:34:22.652Z"
+    },
+    {
+      "id": 2,
+      "description": "Hamburger",
+      "type": "outcome",
+      "category": "food",
+      "price": 6,
+      "createdAt": "2023-05-02T09:45:22.652Z"
+    },
+    {
+      "description": "carro",
+      "category": "despesas",
+      "price": 3000,
+      "type": "income",
+      "createdAt": "2023-10-31T14:19:15.563Z",
+      "id": 3
+    }
+  ]
 }

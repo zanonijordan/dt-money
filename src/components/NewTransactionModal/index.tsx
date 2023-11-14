@@ -11,7 +11,8 @@ import {
   Overlay,
   TransactionTypeButton,
 } from './styles'
-import { api } from '../../lib/axios'
+import { useContext } from 'react'
+import { TransactionContext } from '../../contexts/TransactionsContext'
 
 const newTransactionFormSchema = z.object({
   description: z.string(),
@@ -25,12 +26,14 @@ export type NewTransactionModalProps = {
   title?: string
 }
 
-export const NewTransactionModal = ({ title }: NewTransactionModalProps) => {
+export const NewTransactionModal = () => {
+  const { createTransaction } = useContext(TransactionContext)
   const {
     control,
     register,
     handleSubmit,
     formState: { isSubmitting },
+    reset,
   } = useForm<NewTransactionFormInputs>({
     resolver: zodResolver(newTransactionFormSchema),
     defaultValues: {
@@ -40,14 +43,8 @@ export const NewTransactionModal = ({ title }: NewTransactionModalProps) => {
 
   async function handleCreateNewTransaction(data: NewTransactionFormInputs) {
     const { description, category, price, type } = data
-    await api.post('transactions', {
-      // ...data
-      description,
-      category,
-      price,
-      type,
-      createdAt: new Date(),
-    })
+    await createTransaction({ description, category, price, type })
+    reset()
   }
 
   return (

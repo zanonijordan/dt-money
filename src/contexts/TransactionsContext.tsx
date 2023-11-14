@@ -1,4 +1,4 @@
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useCallback, useEffect, useState } from 'react'
 import { api } from '../lib/axios'
 import { createContext } from 'use-context-selector'
 
@@ -28,7 +28,7 @@ export const TransactionContext = createContext({} as TransactionContextType)
 
 export function TransactionProvider({ children }: TransactionProviderTypes) {
   const [transactions, setTransactions] = useState<Transaction[]>([])
-  async function fetchTransactions(query?: string) {
+  const fetchTransactions = useCallback(async (query?: string) => {
     const response = await api.get('transactions', {
       params: {
         _sort: 'createdAt',
@@ -37,19 +37,22 @@ export function TransactionProvider({ children }: TransactionProviderTypes) {
       },
     })
     setTransactions(response.data)
-  }
-  async function createTransaction(data: CreateTransactionsInput) {
-    const { description, category, price, type } = data
-    const response = await api.post('transactions', {
-      // ...data
-      description,
-      category,
-      price,
-      type,
-      createdAt: new Date(),
-    })
-    setTransactions((state) => [response.data, ...state])
-  }
+  }, [])
+  const createTransaction = useCallback(
+    async (data: CreateTransactionsInput) => {
+      const { description, category, price, type } = data
+      const response = await api.post('transactions', {
+        // ...data
+        description,
+        category,
+        price,
+        type,
+        createdAt: new Date(),
+      })
+      setTransactions((state) => [response.data, ...state])
+    },
+    [],
+  )
   useEffect(() => {
     fetchTransactions()
   }, [])

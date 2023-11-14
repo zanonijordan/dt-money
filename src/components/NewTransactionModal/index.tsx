@@ -11,8 +11,8 @@ import {
   Overlay,
   TransactionTypeButton,
 } from './styles'
-import { useContext } from 'react'
 import { TransactionContext } from '../../contexts/TransactionsContext'
+import { useContextSelector } from 'use-context-selector'
 
 const newTransactionFormSchema = z.object({
   description: z.string(),
@@ -27,7 +27,12 @@ export type NewTransactionModalProps = {
 }
 
 export const NewTransactionModal = () => {
-  const { createTransaction } = useContext(TransactionContext)
+  const createTransaction = useContextSelector(
+    TransactionContext,
+    (context) => {
+      return context.createTransaction
+    },
+  )
   const {
     control,
     register,
